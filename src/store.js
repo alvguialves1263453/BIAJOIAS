@@ -16,7 +16,7 @@ export const STORAGE_KEY = 'bia_semijoias_data'
 
 const TABLES = ['maletas', 'produtos', 'vendas', 'reservas', 'clientes', 'devolucoes', 'categorias', 'reposicoes', 'movimentacoes']
 
-let supabaseDisponivel = true
+let supabaseDisponivel = !!supabase
 
 const defaultData = {
   maletas: [
@@ -81,7 +81,27 @@ function salvarLocalStorage() {
   } catch (e) { }
 }
 
+function fallbackToLocalStorage() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY)
+    if (raw) {
+      var parsed = JSON.parse(raw)
+      Object.keys(parsed).forEach(function(k) { data[k] = parsed[k] })
+      return data
+    }
+  } catch (e2) { }
+
+  var defaults = clone(defaultData)
+  Object.keys(defaults).forEach(function(k) { data[k] = defaults[k] })
+  salvarLocalStorage()
+  return data
+}
+
 export async function loadData() {
+  if (!supabase) {
+    supabaseDisponivel = false
+    return fallbackToLocalStorage()
+  }
   try {
     const timeout = new Promise(function(_, reject) {
       setTimeout(function() { reject(new Error('Timeout Supabase')) }, 5000)
@@ -102,27 +122,26 @@ export async function loadData() {
 
     if (hasError) throw new Error('Erro ao carregar dados do Supabase')
 
-    // Mesclar dados do localStorage em tabelas vazias do Supabase
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY)
-      if (raw) {
-        const saved = JSON.parse(raw)
-        for (const t of TABLES) {
-          if (data[t].length === 0 && saved[t] && saved[t].length > 0) {
-            data[t] = saved[t]
-            // Tentar salvar no Supabase
-            for (const item of saved[t]) {
-              const { error: upsErr } = await supabase.from(t).upsert(limparItem(item))
-              if (upsErr) console.error('Erro upsert ' + t + ':', upsErr.message, upsErr.code, upsErr.details)
-            }
-          }
-        }
-      }
-    } catch (e) { }
-
     const temDados = TABLES.some(t => data[t].length > 0)
     if (!temDados) {
       await seedDefaultData()
+    } else {
+      // Tentar mesclar dados do localStorage perdidos
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY)
+        if (raw) {
+          const saved = JSON.parse(raw)
+          for (const t of TABLES) {
+            if (data[t].length === 0 && saved[t] && saved[t].length > 0) {
+              data[t] = saved[t]
+              for (const item of saved[t]) {
+                const { error: upsErr } = await supabase.from(t).upsert(limparItem(item))
+                if (upsErr) console.error('Erro upsert ' + t + ':', upsErr.message, upsErr.code, upsErr.details)
+              }
+            }
+          }
+        }
+      } catch (e) { }
     }
 
     supabaseDisponivel = true
@@ -131,20 +150,7 @@ export async function loadData() {
   } catch (e) {
     supabaseDisponivel = false
     console.warn('Supabase indisponível, usando localStorage...', e)
-
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY)
-      if (raw) {
-        var parsed = JSON.parse(raw)
-        Object.keys(parsed).forEach(function(k) { data[k] = parsed[k] })
-        return data
-      }
-    } catch (e2) { }
-
-    var defaults = clone(defaultData)
-    Object.keys(defaults).forEach(function(k) { data[k] = defaults[k] })
-    salvarLocalStorage()
-    return data
+    return fallbackToLocalStorage()
   }
 }
 
