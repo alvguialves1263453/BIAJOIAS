@@ -114,6 +114,7 @@ function fallbackToLocalStorage() {
     if (raw) {
       var parsed = JSON.parse(raw)
       Object.keys(parsed).forEach(function(k) { data[k] = parsed[k] })
+      filtrarDeletedIds()
       return data
     }
   } catch (e2) { }
@@ -122,6 +123,15 @@ function fallbackToLocalStorage() {
   Object.keys(defaults).forEach(function(k) { data[k] = defaults[k] })
   salvarLocalStorage()
   return data
+}
+
+function filtrarDeletedIds() {
+  const deleted = getDeletedIds()
+  for (const t of TABLES) {
+    if (deleted[t] && deleted[t].length > 0) {
+      data[t] = data[t].filter(d => deleted[t].indexOf(d.id) === -1)
+    }
+  }
 }
 
 export async function loadData() {
@@ -171,13 +181,7 @@ export async function loadData() {
       } catch (e) { }
     }
 
-    // Filtrar itens que foram deletados localmente
-    const deleted = getDeletedIds()
-    for (const t of TABLES) {
-      if (deleted[t] && deleted[t].length > 0) {
-        data[t] = data[t].filter(d => deleted[t].indexOf(d.id) === -1)
-      }
-    }
+    filtrarDeletedIds()
 
     supabaseDisponivel = true
     salvarLocalStorage()
@@ -190,26 +194,24 @@ export async function loadData() {
 }
 
 async function seedDefaultData() {
-  // Preserve dados do usuário no localStorage em vez de semear defaults
+  // Se o usuário já salvou dados no localStorage (mesmo vazios), usa eles
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
     if (raw) {
       const saved = JSON.parse(raw)
-      const temDados = TABLES.some(function(t) { return saved[t] && saved[t].length > 0 })
-      if (temDados) {
-        TABLES.forEach(function(t) { data[t] = saved[t] || [] })
-        // Salvar dados do localStorage no Supabase
-        for (const t of TABLES) {
-          for (const item of data[t]) {
-            const { error: upsErr } = await supabase.from(t).upsert(limparItem(item))
-            if (upsErr) console.error('Erro upsert ' + t + ':', upsErr.message, upsErr.code, upsErr.details)
-          }
+      TABLES.forEach(function(t) { data[t] = (saved[t] || []) })
+      // Sincronizar dados do localStorage (mesmo se vazio) pro Supabase
+      for (const t of TABLES) {
+        for (const item of data[t]) {
+          const { error: upsErr } = await supabase.from(t).upsert(limparItem(item))
+          if (upsErr) console.error('Erro upsert ' + t + ':', upsErr.message, upsErr.code, upsErr.details)
         }
-        return
       }
+      return
     }
   } catch (e) { }
 
+  // Primeiro acesso: semear dados padrão
   for (const t of TABLES) {
     for (const item of data[t]) {
       try {
