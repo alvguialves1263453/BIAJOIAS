@@ -48,9 +48,11 @@ export function renderFinanceiro() {
     for (var l = 0; l < filtered.length; l++) {
       var v3 = filtered[l];
       var prodNome = '';
-      var cliNome = '';
-      for (var m = 0; m < data.produtos.length; m++) {
-        if (data.produtos[m].id === v3.produtoId) { prodNome = data.produtos[m].nome; break; }
+      var cliNome = v3.clienteNome || '';
+      if (!cliNome) {
+        for (var n = 0; n < data.clientes.length; n++) {
+          if (data.clientes[n].id === v3.clienteId) { cliNome = data.clientes[n].nome; break; }
+        }
       }
       for (var n = 0; n < data.clientes.length; n++) {
         if (data.clientes[n].id === v3.clienteId) { cliNome = data.clientes[n].nome; break; }

@@ -271,9 +271,11 @@ export function mvRenderVendidos() {
     for (var j = 0; j < data.produtos.length; j++) {
       if (data.produtos[j].id === v.produtoId && data.produtos[j].maletaId === mvMaletaId) {
         var produto = data.produtos[j];
-        var cliNome = '';
-        for (var k = 0; k < data.clientes.length; k++) {
-          if (data.clientes[k].id === v.clienteId) { cliNome = data.clientes[k].nome; break; }
+        var cliNome = v.clienteNome || '';
+        if (!cliNome) {
+          for (var k = 0; k < data.clientes.length; k++) {
+            if (data.clientes[k].id === v.clienteId) { cliNome = data.clientes[k].nome; break; }
+          }
         }
         maletaVendas.push({ venda: v, produto: produto, cliente: cliNome });
         break;

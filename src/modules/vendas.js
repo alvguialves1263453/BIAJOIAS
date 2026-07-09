@@ -427,6 +427,7 @@ export function renderVendas() {
       for (var si = 0; si < data.produtos.length; si++) {
         if (data.produtos[si].id === v.produtoId && data.produtos[si].nome.toLowerCase().indexOf(search) > -1) { matched = true; break; }
       }
+      if (!matched && v.clienteNome && v.clienteNome.toLowerCase().indexOf(search) > -1) matched = true;
       if (!matched) {
         for (var si2 = 0; si2 < data.clientes.length; si2++) {
           if (data.clientes[si2].id === v.clienteId && data.clientes[si2].nome.toLowerCase().indexOf(search) > -1) { matched = true; break; }
@@ -450,9 +451,11 @@ export function renderVendas() {
     for (var k = 0; k < data.produtos.length; k++) {
       if (data.produtos[k].id === v2.produtoId) { prodNome = data.produtos[k].nome; break; }
     }
-    var cliNome = '';
-    for (var l = 0; l < data.clientes.length; l++) {
-      if (data.clientes[l].id === v2.clienteId) { cliNome = data.clientes[l].nome; break; }
+    var cliNome = v2.clienteNome || '';
+    if (!cliNome) {
+      for (var l = 0; l < data.clientes.length; l++) {
+        if (data.clientes[l].id === v2.clienteId) { cliNome = data.clientes[l].nome; break; }
+      }
     }
     var totalValor = v2.valor - (v2.desconto || 0);
 
@@ -516,6 +519,7 @@ export async function salvarVenda() {
       var vendaObj = {
         produtoId: prodId,
         clienteId: clienteId,
+        clienteNome: document.getElementById('ac-vendaCliente').value,
         telefone: telefone,
         instagram: instagram,
         valor: preco,
@@ -569,6 +573,7 @@ async function salvarVendaEdit(editId) {
     id: editId,
     produtoId: produtoId,
     clienteId: clienteId,
+    clienteNome: document.getElementById('ac-vendaCliente').value,
     telefone: document.getElementById('vendaTelefone').value.trim(),
     instagram: document.getElementById('vendaInstagram').value.trim(),
     valor: parseFloat(document.getElementById('vendaValor').value) || 0,

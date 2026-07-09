@@ -122,9 +122,11 @@ export function renderDashboard() {
         for (var pi = 0; pi < data.produtos.length; pi++) {
           if (data.produtos[pi].id === v.produtoId) { prodNome = data.produtos[pi].nome; break; }
         }
-        var cliNome = '';
-        for (var ci = 0; ci < data.clientes.length; ci++) {
-          if (data.clientes[ci].id === v.clienteId) { cliNome = data.clientes[ci].nome; break; }
+        var cliNome = v.clienteNome || '';
+        if (!cliNome) {
+          for (var ci = 0; ci < data.clientes.length; ci++) {
+            if (data.clientes[ci].id === v.clienteId) { cliNome = data.clientes[ci].nome; break; }
+          }
         }
         var card = document.createElement('div');
         card.className = 'venda-card';
