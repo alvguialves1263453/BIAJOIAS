@@ -111,21 +111,28 @@ export function renderFinanceiro() {
 }
 
 export async function resetarFinancas() {
-  var total = data.vendas.length;
+  function contar() {
+    return data.vendas.length + data.movimentacoes.length + data.reservas.length + data.devolucoes.length + data.reposicoes.length;
+  }
+  var total = contar();
   if (total === 0) {
-    showToast('N\u00e3o h\u00e1 vendas para resetar.', 'info');
+    showToast('N\u00e3o h\u00e1 dados financeiros para resetar.', 'info');
     return;
   }
-  var c1 = await showConfirm('Tem certeza que deseja resetar TODAS as ' + total + ' venda' + (total > 1 ? 's' : '') + '? Essa a\u00e7\u00e3o \u00c9 IRREVERS\u00cdVEL.');
+  var c1 = await showConfirm('Tem certeza que deseja resetar TODOS os ' + total + ' registro' + (total > 1 ? 's' : '') + ' financeiros? Isso inclui vendas, hist\u00f3rico, reservas, devolu\u00e7\u00f5es e reposi\u00e7\u00f5es. Essa a\u00e7\u00e3o \u00c9 IRREVERS\u00cdVEL.');
   if (!c1) return;
-  var c2 = await showConfirm('CONFIRMA\u00c7\u00c3O FINAL: Deseja realmente excluir PERMANENTEMENTE todas as ' + total + ' venda' + (total > 1 ? 's' : '') + '? N\u00e3o ser\u00e1 poss\u00edvel recuperar.');
+  var c2 = await showConfirm('CONFIRMA\u00c7\u00c3O FINAL: Deseja realmente excluir PERMANENTEMENTE todos os ' + total + ' registro' + (total > 1 ? 's' : '') + '? N\u00e3o ser\u00e1 poss\u00edvel recuperar.');
   if (!c2) return;
   try {
-    var ids = data.vendas.map(function(v) { return v.id });
-    for (var i = 0; i < ids.length; i++) {
-      await removeItem('vendas', ids[i]);
+    var tabelas = ['vendas', 'movimentacoes', 'reservas', 'devolucoes', 'reposicoes'];
+    for (var t = 0; t < tabelas.length; t++) {
+      var tab = tabelas[t];
+      var ids = data[tab].map(function(v) { return v.id });
+      for (var i = 0; i < ids.length; i++) {
+        await removeItem(tab, ids[i]);
+      }
     }
-    showToast('Todas as vendas foram removidas.', 'success');
+    showToast('Todos os dados financeiros foram removidos.', 'success');
     renderFinanceiro();
   } catch (e) {
     showToast('Erro ao resetar finan\u00e7as.', 'error');
