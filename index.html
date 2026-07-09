@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#D4727D">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>BIA JOIAS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<div id="app">
+  <!-- Sidebar (desktop) -->
+  <nav class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon">B</div>
+      <div class="logo-text">
+        <h2>BIA JOIAS</h2>
+        <span>Gestão de Semi Joias</span>
+      </div>
+    </div>
+    <div class="sidebar-nav">
+      <button class="nav-item active" data-section="dashboard" onclick="navigate('dashboard')">
+        <i class="fas fa-home"></i><span>Início</span>
+      </button>
+      <button class="nav-item" data-section="maletas" onclick="navigate('maletas')">
+        <i class="fas fa-suitcase"></i><span>Maletas</span>
+      </button>
+      <button class="nav-item" data-section="vendas" onclick="navigate('vendas')">
+        <i class="fas fa-shopping-cart"></i><span>Vendas</span>
+      </button>
+      <button class="nav-item" data-section="financeiro" onclick="navigate('financeiro')">
+        <i class="fas fa-chart-line"></i><span>Financeiro</span>
+      </button>
+      <div class="sidebar-divider"></div>
+      <button class="nav-item" data-section="clientes" onclick="navigate('clientes')">
+        <i class="fas fa-users"></i><span>Clientes</span>
+      </button>
+      <button class="nav-item" data-section="reservas" onclick="navigate('reservas')">
+        <i class="fas fa-calendar-alt"></i><span>Reservas</span>
+      </button>
+      <button class="nav-item" data-section="devolucoes" onclick="navigate('devolucoes')">
+        <i class="fas fa-undo"></i><span>Devoluções</span>
+      </button>
+      <button class="nav-item" data-section="categorias" onclick="navigate('categorias')">
+        <i class="fas fa-tags"></i><span>Categorias</span>
+      </button>
+      <div class="sidebar-divider"></div>
+      <button class="nav-item" data-section="configuracoes" onclick="navigate('configuracoes')">
+        <i class="fas fa-cog"></i><span>Configurações</span>
+      </button>
+    </div>
+    <div class="sidebar-footer">
+      <button class="sidebar-theme-btn" id="sidebarThemeToggle">
+        <span id="sidebarThemeIcon">🌙</span> Tema
+      </button>
+    </div>
+  </nav>
+
+  <!-- Sidebar overlay (mobile) -->
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+  <!-- Main Area -->
+  <div class="main-area">
+
+  <!-- Header -->
+  <header id="header">
+    <button id="hamburger" class="header-icon hamburger-btn" onclick="toggleSidebar()">
+      <i class="fas fa-bars"></i>
+    </button>
+    <button id="backBtn" class="header-back" style="display:none" onclick="window.historyBack()">
+      <i class="fas fa-chevron-left"></i>
+    </button>
+    <h1 id="pageTitle">Início</h1>
+    <div class="header-actions">
+      <button id="searchToggle" class="header-icon" onclick="toggleGlobalSearch()"><i class="fas fa-search"></i></button>
+      <button id="themeToggle" class="header-icon"><span id="themeIcon">🌙</span></button>
+    </div>
+  </header>
+
+  <!-- Search Bar -->
+  <div id="searchBar" class="search-bar" style="display:none">
+    <i class="fas fa-search"></i>
+    <input type="text" id="globalSearch" placeholder="Buscar..." autocomplete="off">
+    <button class="search-clear" onclick="closeSearch()"><i class="fas fa-times"></i></button>
+  </div>
+
+  <!-- Main Content -->
+  <main id="mainContent">
+
+    <!-- ===== TAB: INÍCIO ===== -->
+    <div class="tab-content active" id="tab-inicio" data-tab="inicio">
+
+      <div class="section-content active" id="section-dashboard">
+        <div class="greeting" id="greeting">
+          <div class="greeting-text">
+            <span class="greeting-hello" id="greetingText">Olá! 👋</span>
+            <span class="greeting-sub">Bem-vinda de volta</span>
+          </div>
+          <div class="greeting-faturamento">
+            <span class="greeting-label">Faturamento do mês</span>
+            <strong class="greeting-valor" id="metricFaturamentoMes">R$ 0</strong>
+          </div>
+        </div>
+
+        <div class="metric-grid-sm">
+          <div class="metric-card-sm" onclick="navigate('maletas')">
+            <div class="metric-icon-sm suitcase"><i class="fas fa-suitcase"></i></div>
+            <div class="metric-info">
+              <strong id="metricMaletasAtivas">0</strong>
+              <span>Maletas Ativas</span>
+            </div>
+          </div>
+          <div class="metric-card-sm" onclick="navigate('maletas')">
+            <div class="metric-icon-sm gem"><i class="fas fa-gem"></i></div>
+            <div class="metric-info">
+              <strong id="metricTotalEstoque">0</strong>
+              <span>Em Estoque</span>
+            </div>
+          </div>
+          <div class="metric-card-sm" onclick="navigate('vendas')">
+            <div class="metric-icon-sm cart"><i class="fas fa-shopping-cart"></i></div>
+            <div class="metric-info">
+              <strong id="metricProdVendidos">0</strong>
+              <span>Vendidos (mês)</span>
+            </div>
+          </div>
+          <div class="metric-card-sm" onclick="navigate('vendas')">
+            <div class="metric-icon-sm clock"><i class="fas fa-clock"></i></div>
+            <div class="metric-info">
+              <strong id="metricProdReservados">0</strong>
+              <span>Reservados</span>
+            </div>
+          </div>
+          <div class="metric-card-sm" onclick="navigate('reposicoes')">
+            <div class="metric-icon-sm" style="background:var(--warning-bg);color:var(--warning)"><i class="fas fa-truck-loading"></i></div>
+            <div class="metric-info">
+              <strong id="metricReposicoesPendentes">0</strong>
+              <span>Reposições Pend.</span>
+            </div>
+          </div>
+        </div>
+
+        <div id="alertDevolucoes" class="alert-card" style="display:none">
+          <i class="fas fa-exclamation-triangle"></i>
+          <div class="alert-body">
+            <h4>Devoluções Próximas</h4>
+            <p id="alertDevolucoesText"></p>
+          </div>
+        </div>
+
+        <div class="section-label">Vendas por Mês</div>
+        <div class="chart-card">
+          <div class="chart-bars" id="chartBars"></div>
+        </div>
+
+        <div class="section-label">Últimas Vendas</div>
+        <div id="ultimasVendas" class="vendas-list"></div>
+
+        <div style="height:80px"></div>
+      </div>
+    </div>
+
+    <!-- ===== TAB: MALETAS ===== -->
+    <div class="tab-content" id="tab-maletas" data-tab="maletas">
+
+      <!-- Main view: list -->
+      <div class="section-content active" id="section-maletas">
+        <div class="sub-header">
+          <h2>Maletas</h2>
+          <button class="sub-action sub-action-add" onclick="window.resetMaletaForm();openModal('modalMaleta')"><i class="fas fa-plus"></i> Adicionar</button>
+        </div>
+        <div class="search-inline">
+          <i class="fas fa-search"></i>
+          <input type="text" id="searchMaleta" placeholder="Buscar maleta..." oninput="renderMaletas()">
+        </div>
+        <div id="maletaMonthGroups"></div>
+        <div class="empty-state" id="emptyMaletas" style="display:none">
+          <i class="fas fa-suitcase"></i>
+          <h3>Nenhuma maleta</h3>
+          <p>Crie sua primeira maleta!</p>
+        </div>
+        <div style="height:80px"></div>
+      </div>
+
+      <!-- Sub-view: products inside maleta -->
+      <div class="section-content" id="section-maleta-detail">
+        <div class="sub-header">
+          <button class="sub-back" onclick="window.voltarParaMaletas()"><i class="fas fa-chevron-left"></i></button>
+          <h2 id="mdMaletaNome">Produtos</h2>
+          <button class="sub-action sub-action-add" onclick="window.abrirNovoProdutoNaMaleta()"><i class="fas fa-plus"></i> Adicionar</button>
+        </div>
+        <div class="search-inline">
+          <i class="fas fa-search"></i>
+          <input type="text" id="searchProdutoMaleta" placeholder="Buscar produto..." oninput="renderProdutosDaMaleta()">
+        </div>
+        <div class="prod-grid" id="gridProdutosMaleta"></div>
+        <div class="empty-state" id="emptyProdutosMaleta" style="display:none">
+          <i class="fas fa-gem"></i>
+          <h3>Nenhum produto</h3>
+          <p>Adicione produtos a esta maleta.</p>
+        </div>
+        <div style="height:80px"></div>
+      </div>
+
+      <!-- Sub-view: bulk sell -->
+      <div class="section-content" id="section-maleta-vendas">
+        <div class="sub-header">
+          <button class="sub-back" onclick="window.voltarMaletas()"><i class="fas fa-chevron-left"></i></button>
+          <h2 id="mvMaletaTitle">Vender</h2>
+        </div>
+        <div class="mv-grid" id="mvGrid"></div>
+        <div class="mv-vendidos-section">
+          <div class="section-label">Vendidos desta Maleta</div>
+          <div id="mvVendidosGrid" class="mv-vendidos-grid"></div>
+        </div>
+        <div style="height:80px"></div>
+      </div>
+    </div>
+
+    <!-- ===== TAB: VENDAS ===== -->
+    <div class="tab-content" id="tab-vendas" data-tab="vendas">
+      <div class="section-content active" id="section-vendas">
+        <div class="search-inline">
+          <i class="fas fa-search"></i>
+          <input type="text" id="searchVenda" placeholder="Buscar venda..." oninput="renderVendas()">
+        </div>
+        <div id="listaVendas" class="vendas-list"></div>
+        <div class="empty-state" id="emptyVendas" style="display:none">
+          <i class="fas fa-shopping-cart"></i>
+          <h3>Nenhuma venda</h3>
+          <p>Registre sua primeira venda.</p>
+        </div>
+        <div style="height:80px"></div>
+      </div>
+    </div>
+
+    <!-- ===== TAB: FINANCEIRO ===== -->
+    <div class="tab-content" id="tab-financeiro" data-tab="financeiro">
+      <div class="section-content active" id="section-financeiro">
+        <div class="fin-summary">
+          <div class="fin-card">
+            <span class="fin-label">Receita Total</span>
+            <strong class="fin-value" id="finReceitaTotal">R$ 0</strong>
+          </div>
+          <div class="fin-card">
+            <span class="fin-label">Lucro Líquido</span>
+            <strong class="fin-value green" id="finLucroLiquido">R$ 0</strong>
+          </div>
+          <div class="fin-card">
+            <span class="fin-label">Comissões (10%)</span>
+            <strong class="fin-value orange" id="finComissoes">R$ 0</strong>
+          </div>
+          <div class="fin-card">
+            <span class="fin-label">Ticket Médio</span>
+            <strong class="fin-value" id="finTicketMedio">R$ 0</strong>
+          </div>
+        </div>
+        <div class="fin-filters">
+          <input type="date" id="finDataInicio" onchange="renderFinanceiro()">
+          <span>→</span>
+          <input type="date" id="finDataFim" onchange="renderFinanceiro()">
+        </div>
+        <div class="fin-actions">
+          <button class="btn-outline btn-danger" onclick="resetarFinancas()">
+            <i class="fas fa-trash-alt"></i> Resetar Finanças (<span id="finTotalVendas">0</span>)
+          </button>
+        </div>
+        <div class="section-label">Receita vs Lucro</div>
+        <div class="chart-card">
+          <div class="chart-bars" id="finChartBars"></div>
+        </div>
+        <div class="section-label">Transações</div>
+        <div id="listaTransacoes" class="vendas-list"></div>
+        <div class="empty-state" id="emptyTransacoes" style="display:none">
+          <i class="fas fa-receipt"></i>
+          <h3>Nenhuma transação</h3>
+          <p>Nenhuma venda encontrada no período.</p>
+        </div>
+        <div style="height:80px"></div>
+      </div>
+    </div>
+
+    <!-- ===== TAB: MAIS ===== -->
+    <div class="tab-content" id="tab-mais" data-tab="mais">
+      <div class="section-content active" id="section-mais">
+        <div class="mais-grid">
+          <button class="mais-item" onclick="navigate('clientes')">
+            <div class="mais-icon" style="background:#FCE8EB"><i class="fas fa-users" style="color:#D4727D"></i></div>
+            <span>Clientes</span>
+          </button>
+          <button class="mais-item" onclick="navigate('reservas')">
+            <div class="mais-icon" style="background:#FFF0E0"><i class="fas fa-calendar-alt" style="color:#E8B86D"></i></div>
+            <span>Reservas</span>
+          </button>
+          <button class="mais-item" onclick="navigate('devolucoes')">
+            <div class="mais-icon" style="background:#F0E8FF"><i class="fas fa-undo" style="color:#8B6DC4"></i></div>
+            <span>Devoluções</span>
+          </button>
+          <button class="mais-item" onclick="navigate('categorias')">
+            <div class="mais-icon" style="background:#E0F0E8"><i class="fas fa-tags" style="color:#5BA87A"></i></div>
+            <span>Categorias</span>
+          </button>
+          <button class="mais-item" onclick="navigate('reposicoes')">
+            <div class="mais-icon" style="background:#FFF0E0"><i class="fas fa-truck-loading" style="color:#E8B86D"></i></div>
+            <span>Reposições</span>
+          </button>
+          <button class="mais-item" onclick="navigate('historico')">
+            <div class="mais-icon" style="background:#E8E0F0"><i class="fas fa-history" style="color:#7B5EA7"></i></div>
+            <span>Histórico</span>
+          </button>
+          <button class="mais-item" onclick="navigate('configuracoes')">
+            <div class="mais-icon" style="background:#E8F0FE"><i class="fas fa-cog" style="color:#4A90D9"></i></div>
+            <span>Configurações</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Clientes -->
+      <div class="section-content" id="section-clientes">
+        <div class="sub-header">
+          <button class="sub-back" onclick="navigate('mais')"><i class="fas fa-chevron-left"></i></button>
+          <h2>Clientes</h2>
+          <button class="sub-action" onclick="window.resetClienteForm();openModal('modalCliente')"><i class="fas fa-plus"></i></button>
+        </div>
+        <div class="search-inline">
+          <i class="fas fa-search"></i>
+          <input type="text" id="searchCliente" placeholder="Buscar cliente..." oninput="renderClientes()">
+        </div>
+        <div id="gridClientes" class="clientes-list"></div>
+        <div class="empty-state" id="emptyClientes" style="display:none">
+          <i class="fas fa-users"></i>
+          <h3>Nenhum cliente</h3>
+          <p>Cadastre seu primeiro cliente.</p>
+        </div>
+        <div style="height:80px"></div>
+      </div>
+
+      <!-- Reservas -->
+      <div class="section-content" id="section-reservas">
+        <div class="sub-header">
+          <button class="sub-back" onclick="navigate('mais')"><i class="fas fa-chevron-left"></i></button>
+          <h2>Reservas</h2>
+          <button class="sub-action" onclick="window.resetReservaForm();openModal('modalReserva')"><i class="fas fa-plus"></i></button>
+        </div>
+        <div class="search-inline">
+          <i class="fas fa-search"></i>
+          <input type="text" id="searchReserva" placeholder="Buscar reserva..." oninput="renderReservas()">
+        </div>
+        <div id="listaReservas" class="vendas-list"></div>
+        <div class="empty-state" id="emptyReservas" style="display:none">
+          <i class="fas fa-calendar-alt"></i>
+          <h3>Nenhuma reserva</h3>
+          <p>Registre sua primeira reserva.</p>
+        </div>
+        <div style="height:80px"></div>
+      </div>
+
+      <!-- Devoluções -->
+      <div class="section-content" id="section-devolucoes">
+        <div class="sub-header">
+          <button class="sub-back" onclick="navigate('mais')"><i class="fas fa-chevron-left"></i></button>
+          <h2>Devoluções</h2>
+        </div>
+        <div class="devolucao-form">
+          <select id="selectMaletaDevolucao" class="input" onchange="carregarProdutosDevolucao()">
+            <option value="">Selecione uma maleta</option>
+          </select>
+        </div>
+        <div id="divProdutosDevolucao" class="devolucao-produtos"></div>
+        <button class="btn-primary btn-full" onclick="confirmarDevolucao()" style="margin-top:12px">
+          <i class="fas fa-check"></i> Confirmar Devolução
+        </button>
+        <div style="height:80px"></div>
+      </div>
+
+      <!-- Reposições -->
+      <div class="section-content" id="section-reposicoes">
+        <div class="sub-header">
+          <button class="sub-back" onclick="navigate('mais')"><i class="fas fa-chevron-left"></i></button>
+          <h2>Reposições</h2>
+          <button class="sub-action" onclick="resetReposicaoForm();openModal('modalReposicao')"><i class="fas fa-plus"></i></button>
+        </div>
+        <div id="listaReposicoes" class="reposicoes-list"></div>
+        <div class="empty-state" id="emptyReposicoes" style="display:none">
+          <i class="fas fa-truck-loading"></i>
+          <h3>Nenhuma reposição</h3>
+          <p>Registre joias repostas nas maletas.</p>
+        </div>
+        <div style="height:80px"></div>
+      </div>
+
+      <!-- Categorias -->
+      <div class="section-content" id="section-categorias">
+        <div class="sub-header">
+          <button class="sub-back" onclick="navigate('mais')"><i class="fas fa-chevron-left"></i></button>
+          <h2>Categorias</h2>
+          <button class="sub-action" onclick="document.getElementById('categoriaEditId').value='';document.getElementById('categoriaNome').value='';document.getElementById('modalCategoriaTitle').textContent='Nova Categoria';openModal('modalCategoria')"><i class="fas fa-plus"></i></button>
+        </div>
+        <div id="listaCategorias" class="categorias-list"></div>
+        <div class="empty-state" id="emptyCategorias" style="display:none">
+          <i class="fas fa-tags"></i>
+          <h3>Nenhuma categoria</h3>
+          <p>Crie sua primeira categoria.</p>
+        </div>
+        <div style="height:80px"></div>
+      </div>
+
+      <!-- Configurações -->
+      <div class="section-content" id="section-configuracoes">
+        <div class="sub-header">
+          <button class="sub-back" onclick="navigate('mais')"><i class="fas fa-chevron-left"></i></button>
+          <h2>Configurações</h2>
+        </div>
+        <div class="config-container">
+          <div class="config-card">
+            <div class="config-card-header">
+              <i class="fas fa-database"></i>
+              <span>Supabase (Banco de Dados)</span>
+            </div>
+            <div class="config-card-body">
+              <div class="config-status-row">
+                <i class="fas fa-circle" id="supabaseIcon"></i>
+                <span id="supabaseStatus">Verificando...</span>
+              </div>
+              <button class="config-btn" onclick="window.testSupabaseConnection()">Testar Conexão</button>
+            </div>
+          </div>
+          <div class="config-card">
+            <div class="config-card-header">
+              <i class="fas fa-image"></i>
+              <span>ImageKit (Imagens)</span>
+            </div>
+            <div class="config-card-body">
+              <div class="config-status-row">
+                <i class="fas fa-circle" id="imagekitIcon"></i>
+                <span id="imagekitStatus">Verificando...</span>
+              </div>
+              <button class="config-btn" onclick="window.testImageKitConnection()">Testar Conexão</button>
+            </div>
+          </div>
+        </div>
+        <div style="height:80px"></div>
+      </div>
+
+      <!-- Histórico -->
+      <div class="section-content" id="section-historico">
+        <div class="sub-header">
+          <button class="sub-back" onclick="navigate('mais')"><i class="fas fa-chevron-left"></i></button>
+          <h2>Histórico</h2>
+        </div>
+        <div id="listaHistorico" class="historico-list"></div>
+        <div class="empty-state" id="emptyHistorico" style="display:none">
+          <i class="fas fa-history"></i>
+          <h3>Nenhum histórico</h3>
+          <p>As movimentações aparecerão aqui.</p>
+        </div>
+        <div style="height:80px"></div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Bottom Tab Bar -->
+  <nav id="tabBar">
+    <button class="tab-item active" data-tab="inicio" onclick="navigate('dashboard')">
+      <i class="fas fa-home"></i>
+      <span>Início</span>
+    </button>
+    <button class="tab-item" data-tab="maletas" onclick="navigate('maletas')">
+      <i class="fas fa-suitcase"></i>
+      <span>Maletas</span>
+    </button>
+    <button class="tab-item" data-tab="vendas" onclick="navigate('vendas')">
+      <i class="fas fa-shopping-cart"></i>
+      <span>Vendas</span>
+    </button>
+    <button class="tab-item" data-tab="financeiro" onclick="navigate('financeiro')">
+      <i class="fas fa-chart-line"></i>
+      <span>Finanças</span>
+    </button>
+    <button class="tab-item" data-tab="mais" onclick="navigate('mais')">
+      <i class="fas fa-ellipsis-h"></i>
+      <span>Mais</span>
+    </button>
+  </nav>
+
+  <!-- FAB -->
+  <button id="fab" class="fab" onclick="toggleFab()">
+    <i class="fas fa-plus"></i>
+  </button>
+
+  <!-- FAB Menu -->
+  <div id="fabMenu" class="fab-menu">
+    <div class="fab-menu-overlay" onclick="toggleFab()"></div>
+    <div class="fab-menu-items">
+      <button class="fab-menu-item" onclick="toggleFab();window.resetVendaForm();openModal('modalVenda')">
+        <span class="fab-menu-icon" style="background:#D4727D"><i class="fas fa-shopping-cart"></i></span>
+        <div class="fab-menu-texto">
+          <strong>Nova Venda</strong>
+          <small>Registrar venda de produtos</small>
+        </div>
+      </button>
+      <button class="fab-menu-item" onclick="toggleFab();window._currentMaletaId?abrirNovoProdutoNaMaleta():showToast('Selecione uma maleta primeiro.','error')">
+        <span class="fab-menu-icon" style="background:#5BA87A"><i class="fas fa-gem"></i></span>
+        <div class="fab-menu-texto">
+          <strong>Novo Produto</strong>
+          <small>Adicionar item à maleta</small>
+        </div>
+      </button>
+      <button class="fab-menu-item" onclick="toggleFab();window.resetMaletaForm();openModal('modalMaleta')">
+        <span class="fab-menu-icon" style="background:#E8B86D"><i class="fas fa-suitcase"></i></span>
+        <div class="fab-menu-texto">
+          <strong>Nova Maleta</strong>
+          <small>Kit de semi-jóias recebido</small>
+        </div>
+      </button>
+      <button class="fab-menu-item" onclick="toggleFab();window.resetReservaForm();openModal('modalReserva')">
+        <span class="fab-menu-icon" style="background:#8B6DC4"><i class="fas fa-calendar-plus"></i></span>
+        <div class="fab-menu-texto">
+          <strong>Nova Reserva</strong>
+          <small>Separar produto para cliente</small>
+        </div>
+      </button>
+      <button class="fab-menu-item" onclick="toggleFab();window.resetReposicaoForm();openModal('modalReposicao')">
+        <span class="fab-menu-icon" style="background:#E8B86D"><i class="fas fa-truck-loading"></i></span>
+        <div class="fab-menu-texto">
+          <strong>Nova Reposição</strong>
+          <small>Repor joia na maleta</small>
+        </div>
+      </button>
+    </div>
+  </div>
+
+  <!-- Bottom Sheets / Modals -->
+
+  <!-- Modal Maleta -->
+  <div class="modal-overlay" id="modalMaleta">
+    <div class="bottom-sheet">
+      <div class="sheet-handle"></div>
+      <div class="sheet-header">
+        <h2 id="modalMaletaTitle">Nova Maleta</h2>
+        <button class="sheet-close" onclick="closeModal('modalMaleta')"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="sheet-body">
+        <input type="hidden" id="maletaEditId">
+        <div class="form-group">
+          <label>Nome *</label>
+          <input type="text" id="maletaNome" class="input" placeholder="Ex: Coleção Verão 2025">
+        </div>
+        <div class="form-group">
+          <label>Origem</label>
+          <input type="text" id="maletaOrigem" class="input" placeholder="Fornecedor">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Data Recebimento</label>
+            <input type="date" id="maletaDataRecebimento" class="input">
+          </div>
+          <div class="form-group">
+            <label>Data Limite</label>
+            <input type="date" id="maletaDataLimite" class="input">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Status</label>
+          <select id="maletaStatus" class="input">
+            <option value="Ativa">Ativa</option>
+            <option value="Finalizada">Finalizada</option>
+            <option value="Devolvida">Devolvida</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Observações</label>
+          <textarea id="maletaObservacoes" class="input" rows="2"></textarea>
+        </div>
+      </div>
+      <div class="sheet-footer">
+        <button class="btn-outline btn-half" onclick="closeModal('modalMaleta')">Cancelar</button>
+        <button class="btn-primary btn-half" onclick="salvarMaleta()">Salvar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Produto -->
+  <div class="modal-overlay" id="modalProduto">
+    <div class="bottom-sheet">
+      <div class="sheet-handle"></div>
+      <div class="sheet-header">
+        <h2 id="modalProdutoTitle">Novo Produto</h2>
+        <button class="sheet-close" onclick="closeModal('modalProduto')"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="sheet-body">
+        <input type="hidden" id="produtoEditId">
+
+        <div class="form-group">
+          <label>Fotos</label>
+          <div class="prod-upload-grid" id="prodUploadThumbs"></div>
+          <div class="prod-upload-actions">
+            <button type="button" class="prod-upload-btn" onclick="document.getElementById('produtoFotoCamera').click()" title="C\u00e2mera">
+              <i class="fas fa-camera"></i>
+            </button>
+            <button type="button" class="prod-upload-btn" onclick="document.getElementById('produtoFotoGaleria').click()" title="Galeria">
+              <i class="fas fa-folder-open"></i>
+            </button>
+          </div>
+          <input type="file" id="produtoFotoCamera" accept="image/*" capture="environment" style="display:none" onchange="addProdutoFotos(this)">
+          <input type="file" id="produtoFotoGaleria" accept="image/*" multiple style="display:none" onchange="addProdutoFotos(this)">
+        </div>
+
+        <div class="form-group">
+          <label>Categoria</label>
+          <div class="categoria-row">
+            <select id="produtoCategoria" class="input" onchange="window.mostrarTamanhoPorCategoria()"></select>
+            <button type="button" class="btn-categoria-add" onclick="window.abrirNovaCategoria()" title="Nova categoria"><i class="fas fa-plus"></i></button>
+          </div>
+        </div>
+
+        <div class="form-group" id="produtoTamanhoGroup" style="display:none">
+          <label>Tamanho</label>
+          <input type="text" id="produtoTamanho" class="input" placeholder="Ex: 18">
+        </div>
+
+        <div class="form-group">
+          <label>Pre\u00e7o de Venda *</label>
+          <input type="number" id="produtoPrecoVenda" class="input" step="0.01" placeholder="0,00">
+        </div>
+      </div>
+      <div class="sheet-footer">
+        <button class="btn-outline btn-half" onclick="closeModal('modalProduto')">Cancelar</button>
+        <button class="btn-primary btn-half" id="salvarProdutoBtn" onclick="salvarProduto()">Salvar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Carrossel Fullscreen -->
+  <div class="carousel-overlay" id="carouselOverlay" onclick="if(event.target===this)closeCarousel()">
+    <div class="carousel-inner">
+      <button class="carousel-close" onclick="closeCarousel()"><i class="fas fa-times"></i></button>
+      <button class="carousel-arrow carousel-prev" id="carouselPrev" onclick="carouselNav(-1)"><i class="fas fa-chevron-left"></i></button>
+      <button class="carousel-arrow carousel-next" id="carouselNext" onclick="carouselNav(1)"><i class="fas fa-chevron-right"></i></button>
+      <div class="carousel-slides" id="carouselSlides"></div>
+      <div class="carousel-footer">
+        <div class="carousel-dots" id="carouselDots"></div>
+        <div class="carousel-info" id="carouselInfo"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Venda -->
+  <div class="modal-overlay" id="modalVenda">
+    <div class="bottom-sheet">
+      <div class="sheet-handle"></div>
+      <div class="sheet-header">
+        <h2 id="modalVendaTitle">Nova Venda</h2>
+        <button class="sheet-close" onclick="closeModal('modalVenda')"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="sheet-body">
+        <input type="hidden" id="vendaEditId">
+        <input type="hidden" id="vendaProdutoId">
+
+        <!-- Step flow: maleta → produtos (only for new venda) -->
+        <div id="vendaStepContainer">
+          <div class="venda-step" id="vendaStepMaletas">
+            <div class="venda-step-label">1. Escolha a maleta</div>
+            <div id="vendaMaletasGrid" class="venda-maletas-grid"></div>
+          </div>
+          <div class="venda-step" id="vendaStepProdutos" style="display:none">
+            <div class="venda-step-header">
+              <button class="venda-step-back" onclick="voltarStepMaletas()" type="button"><i class="fas fa-arrow-left"></i></button>
+              <span id="vendaStepMaletaNome">Produtos</span>
+              <span class="venda-step-count" id="vendaStepCount">0</span>
+            </div>
+            <div id="vendaProdutosGrid" class="venda-produtos-grid"></div>
+            <div class="venda-resumo" id="vendaResumo" style="display:none" onclick="reabrirSelecaoProdutos()" title="Clique para alterar seleção">
+              <div class="venda-resumo-info">
+                <span id="vendaSelectedCount">0</span> selecionados
+                · Total: <strong id="vendaResumoTotal">R$ 0</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Read-only product info for edit mode -->
+        <div id="vendaProdutoReadonly" class="venda-produto-readonly" style="display:none"></div>
+
+        <!-- Client & payment fields -->
+        <div id="vendaFields">
+          <div class="form-group">
+            <label>Cliente *</label>
+            <div class="cliente-row">
+              <div class="autocomplete" style="flex:1">
+                <input type="text" id="ac-vendaCliente" class="input" placeholder="Digite o nome do cliente..." autocomplete="off">
+                <input type="hidden" id="vendaCliente">
+              </div>
+              <button type="button" class="btn-cliente-add" onclick="abrirClienteRapido()" title="Novo cliente">
+                <i class="fas fa-plus"></i>
+              </button>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Telefone</label>
+              <input type="text" id="vendaTelefone" class="input" placeholder="(11) 99999-0000">
+            </div>
+            <div class="form-group">
+              <label>Instagram</label>
+              <input type="text" id="vendaInstagram" class="input" placeholder="@usuario">
+            </div>
+          </div>
+          <div class="form-row" id="vendaValorRow">
+            <div class="form-group">
+              <label>Valor *</label>
+              <input type="number" id="vendaValor" class="input" step="0.01" placeholder="0,00">
+            </div>
+            <div class="form-group">
+              <label>Desconto</label>
+              <input type="number" id="vendaDesconto" class="input" step="0.01" value="0">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Forma de Pagamento</label>
+            <select id="vendaFormaPagamento" class="input" onchange="toggleVendaFormaPagamento()">
+              <option value="">Selecione</option>
+              <option value="Pix">Pix</option>
+              <option value="Dinheiro">Dinheiro</option>
+              <option value="Cartão de Crédito">Cartão de Crédito</option>
+              <option value="Cartão de Débito">Cartão de Débito</option>
+              <option value="Transferência">Transferência</option>
+              <option value="Boleto">Boleto</option>
+              <option value="Carnê">Carnê</option>
+            </select>
+          </div>
+          <div class="form-row" id="vendaCarneRow" style="display:none">
+            <div class="form-group">
+              <label>Qtd. Parcelas</label>
+              <input type="number" id="vendaCarneParcelas" class="input" value="1" min="1">
+            </div>
+            <div class="form-group">
+              <label>1\u00ba Vencimento</label>
+              <input type="date" id="vendaCarneVencimento" class="input">
+            </div>
+          </div>
+          <div class="form-row" id="vendaParcelasRow">
+            <div class="form-group">
+              <label>Parcelas</label>
+              <input type="number" id="vendaParcelas" class="input" value="1" min="1">
+            </div>
+            <div class="form-group">
+              <label>Entrada</label>
+              <input type="number" id="vendaEntrada" class="input" step="0.01" value="0">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Data</label>
+              <input type="date" id="vendaData" class="input">
+            </div>
+            <div class="form-group">
+              <label>&nbsp;</label>
+              <label class="checkbox-label">
+                <input type="checkbox" id="vendaRecebido">
+                <span>Recebido</span>
+              </label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Observação</label>
+            <textarea id="vendaObservacao" class="input" rows="2"></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="sheet-footer">
+        <button class="btn-outline btn-half" onclick="closeModal('modalVenda')">Cancelar</button>
+        <button class="btn-primary btn-half" id="vendaSalvarBtn" onclick="salvarVenda()">Salvar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Venda (bulk) - embedded in section-maleta-vendas -->
+  <div class="mv-panel" id="mvPanel" style="display:none">
+    <div class="mv-panel-header">
+      <span>Finalizar Venda</span>
+      <span class="badge badge-info" id="mvSelectedCount">0 selecionados</span>
+    </div>
+    <div class="mv-panel-body">
+      <div class="form-group">
+          <label>Cliente *</label>
+          <div class="autocomplete">
+            <input type="text" id="ac-mvCliente" class="input" placeholder="Digite o nome do cliente..." autocomplete="off">
+            <input type="hidden" id="mvCliente">
+          </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Telefone</label>
+          <input type="text" id="mvTelefone" class="input">
+        </div>
+        <div class="form-group">
+          <label>Instagram</label>
+          <input type="text" id="mvInstagram" class="input">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Valor Final</label>
+        <input type="number" id="mvValorFinalInput" class="input" step="0.01" oninput="mvCalcularTotal()">
+      </div>
+      <div class="form-group">
+        <label>Desconto (R$)</label>
+        <input type="number" id="mvDesconto" class="input" step="0.01" value="0" oninput="mvCalcularTotal()">
+      </div>
+      <div class="form-group">
+        <label><strong>Total Final</strong></label>
+        <div class="mv-total-final" id="mvTotalFinal">R$ 0</div>
+        <input type="hidden" id="mvTotalFinalInput">
+      </div>
+      <div class="form-group">
+        <label>Forma de Pagamento</label>
+        <select id="mvFormaPagamento" class="input" onchange="mvOnPagamentoChange()">
+          <option value="">Selecione</option>
+          <option value="Pix">Pix</option>
+          <option value="Dinheiro">Dinheiro</option>
+          <option value="Cartão de Crédito">Cartão de Crédito</option>
+          <option value="Cartão de Débito">Cartão de Débito</option>
+          <option value="Transferência">Transferência</option>
+          <option value="Carnê">Carnê</option>
+        </select>
+      </div>
+      <div id="mvCarneGroup" style="display:none">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Qtd. Parcelas</label>
+            <input type="number" id="mvCarneParcelas" class="input" value="1" min="1">
+          </div>
+          <div class="form-group">
+            <label>1\u00ba Vencimento</label>
+            <input type="date" id="mvCarneVencimento" class="input">
+          </div>
+        </div>
+      </div>
+      <div id="mvParcelasGroup" style="display:none">
+        <div class="form-group">
+          <label>Parcelas</label>
+          <input type="number" id="mvParcelas" class="input" value="1" min="1">
+        </div>
+      </div>
+      <div id="mvTrocoGroup" style="display:none">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Valor Pago</label>
+            <input type="number" id="mvTrocoPago" class="input" oninput="mvCalcularTroco()">
+          </div>
+          <div class="form-group">
+            <label>Troco</label>
+            <div id="mvTrocoResult" class="mv-total-final" style="font-size:13px">-</div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Observação</label>
+        <textarea id="mvObservacao" class="input" rows="2"></textarea>
+      </div>
+      <div class="mv-panel-actions">
+        <button class="btn-outline" onclick="mvLimparSelecao()">Limpar</button>
+        <button class="btn-primary" id="mvFinalizarBtn" onclick="mvFinalizarVenda()" disabled>
+          <i class="fas fa-check"></i> Finalizar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Reserva -->
+  <div class="modal-overlay" id="modalReserva">
+    <div class="bottom-sheet">
+      <div class="sheet-handle"></div>
+      <div class="sheet-header">
+        <h2 id="modalReservaTitle">Nova Reserva</h2>
+        <button class="sheet-close" onclick="closeModal('modalReserva')"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="sheet-body">
+        <input type="hidden" id="reservaEditId">
+        <div class="form-group">
+          <label>Produto *</label>
+          <select id="reservaProduto" class="input"></select>
+        </div>
+        <div class="form-group">
+          <label>Cliente *</label>
+          <div class="autocomplete">
+            <input type="text" id="ac-reservaCliente" class="input" placeholder="Digite o nome do cliente..." autocomplete="off">
+            <input type="hidden" id="reservaCliente">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Data Reserva</label>
+            <input type="date" id="reservaDataReserva" class="input">
+          </div>
+          <div class="form-group">
+            <label>Data Expiração</label>
+            <input type="date" id="reservaDataExpiracao" class="input">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Status</label>
+          <select id="reservaStatus" class="input">
+            <option value="Ativa">Ativa</option>
+            <option value="Cancelada">Cancelada</option>
+            <option value="Convertida">Convertida</option>
+          </select>
+        </div>
+      </div>
+      <div class="sheet-footer">
+        <button class="btn-outline btn-half" onclick="closeModal('modalReserva')">Cancelar</button>
+        <button class="btn-primary btn-half" onclick="salvarReserva()">Salvar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Cliente -->
+  <div class="modal-overlay" id="modalCliente">
+    <div class="bottom-sheet">
+      <div class="sheet-handle"></div>
+      <div class="sheet-header">
+        <h2 id="modalClienteTitle">Novo Cliente</h2>
+        <button class="sheet-close" onclick="closeModal('modalCliente')"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="sheet-body">
+        <input type="hidden" id="clienteEditId">
+        <div class="form-group">
+          <label>Nome *</label>
+          <input type="text" id="clienteNome" class="input" placeholder="Nome completo">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Telefone</label>
+            <input type="text" id="clienteTelefone" class="input" placeholder="(11) 99999-0000">
+          </div>
+          <div class="form-group">
+            <label>Instagram</label>
+            <input type="text" id="clienteInstagram" class="input" placeholder="@usuario">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Observações</label>
+          <textarea id="clienteObservacoes" class="input" rows="2"></textarea>
+        </div>
+      </div>
+      <div class="sheet-footer">
+        <button class="btn-outline btn-half" onclick="closeModal('modalCliente')">Cancelar</button>
+        <button class="btn-primary btn-half" onclick="salvarCliente()">Salvar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Cliente Rápido -->
+  <div class="modal-overlay" id="modalClienteRapido">
+    <div class="bottom-sheet" style="max-width:400px">
+      <div class="sheet-handle"></div>
+      <div class="sheet-header">
+        <h2>Novo Cliente R\u00e1pido</h2>
+        <button class="sheet-close" onclick="closeModal('modalClienteRapido')"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="sheet-body">
+        <div class="form-group">
+          <label>Nome *</label>
+          <input type="text" id="clienteRapidoNome" class="input" placeholder="Nome da cliente">
+        </div>
+        <div class="form-group">
+          <label>Telefone / WhatsApp</label>
+          <input type="text" id="clienteRapidoWhatsapp" class="input" placeholder="(11) 99999-0000">
+        </div>
+      </div>
+      <div class="sheet-footer">
+        <button class="btn-outline btn-half" onclick="closeModal('modalClienteRapido')">Cancelar</button>
+        <button class="btn-primary btn-half" onclick="salvarClienteRapido()">Salvar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Cliente View -->
+  <div class="modal-overlay" id="modalClienteView">
+    <div class="bottom-sheet">
+      <div class="sheet-handle"></div>
+      <div class="sheet-header">
+        <h2>Detalhes do Cliente</h2>
+        <button class="sheet-close" onclick="closeModal('modalClienteView')"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="sheet-body" id="modalClienteViewBody"></div>
+    </div>
+  </div>
+
+  <!-- Modal Categoria -->
+  <div class="modal-overlay" id="modalCategoria">
+    <div class="bottom-sheet">
+      <div class="sheet-handle"></div>
+      <div class="sheet-header">
+        <h2 id="modalCategoriaTitle">Nova Categoria</h2>
+        <button class="sheet-close" onclick="closeModal('modalCategoria')"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="sheet-body">
+        <input type="hidden" id="categoriaEditId">
+        <div class="form-group">
+          <label>Nome *</label>
+          <input type="text" id="categoriaNome" class="input" placeholder="Nome da categoria">
+        </div>
+      </div>
+      <div class="sheet-footer">
+        <button class="btn-outline btn-half" onclick="closeModal('modalCategoria')">Cancelar</button>
+        <button class="btn-primary btn-half" onclick="salvarCategoria()">Salvar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Reposição (batch) -->
+  <div class="modal-overlay" id="modalReposicao">
+    <div class="bottom-sheet">
+      <div class="sheet-handle"></div>
+      <div class="sheet-header">
+        <h2 id="modalReposicaoTitle">Nova Reposição</h2>
+        <button class="sheet-close" onclick="closeModal('modalReposicao')"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="sheet-body">
+        <div class="form-group">
+          <label>Maleta *</label>
+          <select id="reposicaoMaleta" class="input">
+            <option value="">Selecione uma maleta</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Data Recebimento</label>
+          <input type="date" id="reposicaoDataRecebimento" class="input">
+        </div>
+
+        <div class="section-label" style="padding:12px 0 8px">Itens</div>
+        <div id="reposicaoItemsList"></div>
+
+        <button class="btn-outline btn-full" onclick="adicionarItemReposicao()" style="margin-top:8px">
+          <i class="fas fa-plus"></i> Adicionar Item
+        </button>
+      </div>
+      <div class="sheet-footer">
+        <button class="btn-outline btn-half" onclick="closeModal('modalReposicao')">Cancelar</button>
+        <button class="btn-primary btn-half" onclick="mostrarConfirmacaoReposicao()">
+          <i class="fas fa-check"></i> Finalizar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Confirm Reposição -->
+  <div class="modal-overlay" id="modalRepoConfirm">
+    <div class="bottom-sheet" style="max-width:420px;margin:0 auto">
+      <div class="sheet-handle"></div>
+      <div class="sheet-header">
+        <h2>Confirmar Reposição</h2>
+        <button class="sheet-close" onclick="closeModal('modalRepoConfirm')"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="sheet-body" id="modalRepoConfirmBody"></div>
+      <div class="sheet-footer">
+        <button class="btn-outline btn-half" onclick="closeModal('modalRepoConfirm')">Cancelar</button>
+        <button class="btn-primary btn-half" onclick="finalizarReposicao()">
+          <i class="fas fa-check"></i> Confirmar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Seleção de Produtos (abre ao clicar "Escolher" na maleta) -->
+  <div class="modal-overlay" id="modalVendaSelecao">
+    <div class="bottom-sheet">
+      <div class="sheet-handle"></div>
+      <div class="sheet-header">
+        <h2 id="vendaSelecaoTitle">Selecionar Produtos</h2>
+        <button class="sheet-close" onclick="closeModal('modalVendaSelecao')"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="sheet-body" style="padding-bottom:0">
+        <div class="vs-grid" id="vendaSelecaoGrid"></div>
+      </div>
+      <div class="vs-footer" id="vendaSelecaoFooter" style="display:none">
+        <div class="vs-footer-info">
+          <span id="vsSelectedCount">0</span> selecionados · Total: <strong id="vsTotal">R$ 0</strong>
+        </div>
+        <button class="btn-primary vs-footer-btn" onclick="concluirSelecaoVenda()">
+          <i class="fas fa-check"></i> Concluir Seleção
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal MV Detalhe -->
+  <div class="modal-overlay" id="modalMvDetalhe">
+    <div class="bottom-sheet">
+      <div class="sheet-handle"></div>
+      <div class="sheet-header">
+        <h2>Detalhes da Venda</h2>
+        <button class="sheet-close" onclick="closeModal('modalMvDetalhe')"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="sheet-body" id="modalMvDetalheBody"></div>
+    </div>
+  </div>
+
+  <!-- Modal Confirm -->
+  <div class="modal-overlay" id="modalConfirm">
+    <div class="bottom-sheet" style="max-width:360px;margin:0 auto">
+      <div class="sheet-handle"></div>
+      <div class="sheet-body" style="text-align:center;padding:32px 20px">
+        <i class="fas fa-question-circle" style="font-size:48px;color:var(--rose);margin-bottom:12px;"></i>
+        <p id="confirmMessage" style="font-size:15px;color:var(--text);margin-bottom:20px;"></p>
+        <div style="display:flex;gap:8px;justify-content:center;">
+          <button class="btn-outline" onclick="closeConfirm()" style="flex:1">Cancelar</button>
+          <button class="btn-primary" id="confirmBtn" onclick="executeConfirm()" style="flex:1">Confirmar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- end main-area -->
+</div>
+
+<!-- Toast Container -->
+<div id="toastContainer"></div>
+
+<script type="module" src="/src/main.js"></script>
+</body>
+</html>

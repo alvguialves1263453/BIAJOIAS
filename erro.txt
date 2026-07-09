@@ -1,0 +1,11 @@
+<meta name="apple-mobile-web-app-capable" content="yes"> is deprecated. Please include <meta name="mobile-web-app-capable" content="yes">
+configuracoes.js:32 
+ GET https://ik.imagekit.io/isa2koeb2/ 400 (Bad Request)
+(anonymous)	@	configuracoes.js:32
+testConnection	@	configuracoes.js:11
+(anonymous)	@	configuracoes.js:31
+(anonymous)	@	configuracoes.js:40
+renderAll	@	main.js:49
+init	@	main.js:70
+await in init		
+(anonymous)	@	main.js:82
