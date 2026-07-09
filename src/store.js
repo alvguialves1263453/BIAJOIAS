@@ -162,28 +162,6 @@ export async function loadData() {
     const temDados = TABLES.some(t => data[t].length > 0)
     if (!temDados) {
       await seedDefaultData()
-    } else {
-      // Sincronizar dados do localStorage que nunca foram pro Supabase (offline)
-      try {
-        const raw = localStorage.getItem(STORAGE_KEY)
-        if (raw) {
-          const saved = JSON.parse(raw)
-          const deleted = getDeletedIds()
-          for (const t of TABLES) {
-            if (data[t].length === 0 && saved[t] && saved[t].length > 0) {
-              const deletedIds = deleted[t] || []
-              const toSync = saved[t].filter(function(item) { return deletedIds.indexOf(item.id) === -1 })
-              if (toSync.length > 0) {
-                data[t] = toSync
-                for (const item of toSync) {
-                  const { error: upsErr } = await supabase.from(t).upsert(limparItem(item))
-                  if (upsErr) console.error('Erro upsert ' + t + ':', upsErr.code, upsErr.details)
-                }
-              }
-            }
-          }
-        }
-      } catch (e) { }
     }
 
     filtrarDeletedIds()
