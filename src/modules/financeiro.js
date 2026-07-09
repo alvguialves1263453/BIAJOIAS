@@ -116,11 +116,14 @@ export async function resetarFinancas() {
     showToast('N\u00e3o h\u00e1 vendas para resetar.', 'info');
     return;
   }
-  var c = await showConfirm('Tem certeza que deseja resetar todas as ' + total + ' venda' + (total > 1 ? 's' : '') + '? Essa a\u00e7\u00e3o n\u00e3o pode ser desfeita.');
-  if (!c) return;
+  var c1 = await showConfirm('Tem certeza que deseja resetar TODAS as ' + total + ' venda' + (total > 1 ? 's' : '') + '? Essa a\u00e7\u00e3o \u00c9 IRREVERS\u00cdVEL.');
+  if (!c1) return;
+  var c2 = await showConfirm('CONFIRMA\u00c7\u00c3O FINAL: Deseja realmente excluir PERMANENTEMENTE todas as ' + total + ' venda' + (total > 1 ? 's' : '') + '? N\u00e3o ser\u00e1 poss\u00edvel recuperar.');
+  if (!c2) return;
   try {
-    for (var i = 0; i < data.vendas.length; i++) {
-      await removeItem('vendas', data.vendas[i].id);
+    var ids = data.vendas.map(function(v) { return v.id });
+    for (var i = 0; i < ids.length; i++) {
+      await removeItem('vendas', ids[i]);
     }
     showToast('Todas as vendas foram removidas.', 'success');
     renderFinanceiro();
