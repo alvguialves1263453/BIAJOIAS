@@ -1,6 +1,17 @@
 -- BIA JOIAS - Politicas RLS (rodar no SQL Editor do Supabase)
 -- https://supabase.com/dashboard/project/nzzbzrtmotrjdhczdazf/sql/new
 
+-- Remove politicas existentes antes de recriar
+DROP POLICY IF EXISTS "anon_all" ON maletas;
+DROP POLICY IF EXISTS "anon_all" ON categorias;
+DROP POLICY IF EXISTS "anon_all" ON produtos;
+DROP POLICY IF EXISTS "anon_all" ON clientes;
+DROP POLICY IF EXISTS "anon_all" ON vendas;
+DROP POLICY IF EXISTS "anon_all" ON reservas;
+DROP POLICY IF EXISTS "anon_all" ON devolucoes;
+DROP POLICY IF EXISTS "anon_all" ON reposicoes;
+DROP POLICY IF EXISTS "anon_all" ON movimentacoes;
+
 ALTER TABLE maletas ENABLE ROW LEVEL SECURITY;
 ALTER TABLE categorias ENABLE ROW LEVEL SECURITY;
 ALTER TABLE produtos ENABLE ROW LEVEL SECURITY;
