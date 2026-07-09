@@ -13,6 +13,7 @@ export let data = {
 }
 
 export const STORAGE_KEY = 'bia_semijoias_data'
+const DELETED_IDS_KEY = 'bia_semijoias_deleted'
 
 const TABLES = ['maletas', 'produtos', 'vendas', 'reservas', 'clientes', 'devolucoes', 'categorias', 'reposicoes', 'movimentacoes']
 
@@ -81,6 +82,32 @@ function salvarLocalStorage() {
   } catch (e) { }
 }
 
+function getDeletedIds() {
+  try {
+    const raw = localStorage.getItem(DELETED_IDS_KEY)
+    return raw ? JSON.parse(raw) : {}
+  } catch (e) {
+    return {}
+  }
+}
+
+function markDeleted(table, id) {
+  try {
+    const deleted = getDeletedIds()
+    if (!deleted[table]) deleted[table] = []
+    if (deleted[table].indexOf(id) === -1) deleted[table].push(id)
+    localStorage.setItem(DELETED_IDS_KEY, JSON.stringify(deleted))
+  } catch (e) { }
+}
+
+function limparDeletedIds(table) {
+  try {
+    const deleted = getDeletedIds()
+    delete deleted[table]
+    localStorage.setItem(DELETED_IDS_KEY, JSON.stringify(deleted))
+  } catch (e) { }
+}
+
 function fallbackToLocalStorage() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
@@ -142,6 +169,14 @@ export async function loadData() {
           }
         }
       } catch (e) { }
+    }
+
+    // Filtrar itens que foram deletados localmente
+    const deleted = getDeletedIds()
+    for (const t of TABLES) {
+      if (deleted[t] && deleted[t].length > 0) {
+        data[t] = data[t].filter(d => deleted[t].indexOf(d.id) === -1)
+      }
     }
 
     supabaseDisponivel = true
@@ -253,11 +288,14 @@ async function salvarLocalFallback(table, item) {
 }
 
 export async function removeItem(table, id) {
+  let supabaseOk = false
   if (supabaseDisponivel) {
     try {
       const { error } = await supabase.from(table).delete().eq('id', id)
       if (error) {
         console.warn('Erro ao remover no Supabase, usando localStorage:', error)
+      } else {
+        supabaseOk = true
       }
     } catch (e) {
       console.warn('Exceção no Supabase, usando localStorage:', e)
@@ -265,6 +303,18 @@ export async function removeItem(table, id) {
   }
   data[table] = data[table].filter(d => d.id !== id)
   salvarLocalStorage()
+  if (!supabaseOk) {
+    markDeleted(table, id)
+  } else {
+    const deleted = getDeletedIds()
+    if (deleted[table]) {
+      const idx = deleted[table].indexOf(id)
+      if (idx > -1) {
+        deleted[table].splice(idx, 1)
+        localStorage.setItem(DELETED_IDS_KEY, JSON.stringify(deleted))
+      }
+    }
+  }
   notify()
 }
 
